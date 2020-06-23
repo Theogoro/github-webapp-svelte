@@ -1,2 +1,3 @@
 # Github Webapp with Svelte
-Web app using GitHub Api and Svelte
+
+Web app using GitHub API and Svelte
