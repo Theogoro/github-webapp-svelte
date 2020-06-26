@@ -1,11 +1,12 @@
 {
   "name": "github-webapp-svelte",
   "version": "1.0.0",
-  "description": "Web App using SuperHeros API and svelte",
+  "description": "Web App using GitHub API and svelte",
   "main": "webpack.config.js",
   "scripts": {
-    "build": "cross-env NODE_ENV=production webpack -r",
-    "dev": "webpack-dev-server --content-base public --open"
+    "build": "cross-env NODE_ENV=production webpack",
+    "dev": "webpack-dev-server --content-base public --open",
+    "start": "node src/server.js"
   },
   "devDependencies": {
     "cross-env": "^5.2.0",

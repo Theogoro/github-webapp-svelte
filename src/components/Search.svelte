@@ -20,7 +20,6 @@
       });
       username = "";
     }
-    console.log($data);
   };
 
   const changeInputColor = () => {
@@ -73,6 +72,7 @@
     height: calc(100%-10px);
     padding: 5px;
     border: none;
+    outline: none;
   }
   .Search button:hover {
     background-color: rgb(88, 148, 168);

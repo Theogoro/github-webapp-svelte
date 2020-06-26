@@ -1,13 +1,17 @@
 <script>
   import Followers from "./Followers.svelte";
+  import Repos from "./Repos.svelte";
+  import { writable } from "svelte/store";
 
   import { data } from "../data/stores.js";
   import { onDestroy } from "svelte";
 
   let data_value;
+  let urlData = writable("");
 
   const unsubscribe = data.subscribe(data => {
     data_value = data;
+    urlData.update(() => data_value.repos_url);
   });
 
   onDestroy(() => {
@@ -53,8 +57,6 @@
     font-size: 25px;
     display: flex;
     align-items: center;
-    /* border-bottom: solid 2px lightgray;
-    margin-bottom: 5px; */
   }
   .User-bio {
     grid-area: bio;
@@ -65,10 +67,27 @@
     display: flex;
     align-items: center;
   }
+  .User-metric {
+    display: flex;
+    justify-content: space-evenly;
+  }
   [class^="User-"] li {
     list-style: none;
     display: inline;
     margin-right: 5px;
+  }
+  @media (max-width: 600px) {
+    .User {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto 0.5fr auto auto 1fr;
+      grid-template-areas:
+        "img"
+        "soc"
+        "nam"
+        "bio"
+        "mtr";
+      height: auto;
+    }
   }
 </style>
 
@@ -89,6 +108,11 @@
       </div>
       <div class="User-social">
         <ul>
+          {#if data_value.html_url}
+            <li>
+              <a href={data_value.html_url} target="_blank">🗂GitHub Profile</a>
+            </li>
+          {/if}
           {#if data_value.blog}
             <li>
               <a href={data_value.blog} target="_blank">📧{data_value.blog}</a>
@@ -109,45 +133,18 @@
         </ul>
       </div>
       <div class="User-metric">
-        <Followers text="👥Followers" num={data_value.followers} />
-        <Followers text="👤Following" num={data_value.following} />
-        <!-- <li>👥Followers:{data_value.followers}</li>
-        <li>👤Following:{data_value.following}</li> -->
+        <Followers
+          text="👥Followers"
+          num={data_value.followers}
+          urlData={data_value.followers_url} />
+        <Followers
+          text="👤Following"
+          num={data_value.following}
+          urlData={data_value.following_url.replace('{/other_user}', '')} />
       </div>
+    </div>
+    <div class="User-repos">
+      <Repos {urlData} />
     </div>
   {/if}
 </div>
-<!-- {
-  "login": "Theogoro",
-  "id": 48932981,
-  "node_id": "MDQ6VXNlcjQ4OTMyOTgx",
-  "avatar_url": "https://avatars2.githubusercontent.com/u/48932981?v=4",
-  "gravatar_id": "",
-  "url": "https://api.github.com/users/Theogoro",
-  "html_url": "https://github.com/Theogoro",
-  "followers_url": "https://api.github.com/users/Theogoro/followers",
-  "following_url": "https://api.github.com/users/Theogoro/following{/other_user}",
-  "gists_url": "https://api.github.com/users/Theogoro/gists{/gist_id}",
-  "starred_url": "https://api.github.com/users/Theogoro/starred{/owner}{/repo}",
-  "subscriptions_url": "https://api.github.com/users/Theogoro/subscriptions",
-  "organizations_url": "https://api.github.com/users/Theogoro/orgs",
-  "repos_url": "https://api.github.com/users/Theogoro/repos",
-  "events_url": "https://api.github.com/users/Theogoro/events{/privacy}",
-  "received_events_url": "https://api.github.com/users/Theogoro/received_events",
-  "type": "User",
-  "site_admin": false,
-  "name": "Theogoro",
-  "company": "Sitos's Studio",
-  "blog": "",
-  "location": "Desde ARG al Mundo",
-  "email": null,
-  "hireable": null,
-  "bio": "Future full stack developer 💪💪",
-  "twitter_username": null,
-  "public_repos": 8,
-  "public_gists": 0,
-  "followers": 0,
-  "following": 5,
-  "created_at": "2019-03-26T00:29:22Z",
-  "updated_at": "2020-06-22T23:01:46Z"
-} -->
